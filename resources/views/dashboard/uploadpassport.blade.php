@@ -41,7 +41,34 @@
                                     <a href="/viewstudent/{{ $id }}" class="btn btn-sm btn-outline-primary">Go
                                         Back</a>
                                 </div>
+                                <form action="/uploadpassport" method="POST" enctype="multipart/form-data">
+                                    @csrf
 
+                                    <!-- Select Image -->
+                                    <div class="mb-3">
+                                        <label for="passport" class="form-label"><b>Select Passport</b></label>
+                                        <input type="file" name="passport" id="passport" class="form-control"
+                                            accept="image/*" required>
+                                    </div>
+
+                                    <!-- Image Preview -->
+                                    <div class="mb-3">
+                                        <label class="form-label"><b>Preview</b></label><br>
+                                        <div style="width: 120px; height: 120px;">
+                                            <img id="previewImage"
+                                                src="{{ $ppt ? asset('passport/' . $ppt) : asset('assets/img/passport.jpeg') }}"
+                                                style="width: 100%; height: 100%; border-radius: 50%; object-fit: cover;">
+                                        </div>
+                                    </div>
+
+                                    <!-- Hidden Student ID -->
+                                    <input type="hidden" name="student_id" value="{{ $id }}">
+
+                                    <!-- Submit Button -->
+                                    <div class="mb-3">
+                                        <button type="submit" class="btn btn-primary">Upload Passport</button>
+                                    </div>
+                                </form>
                             </div>
                         </div>
                         <hr>
@@ -57,3 +84,12 @@
     <!-- end container -->
 </section>
 @include('dashboard.footer')
+<script>
+    document.getElementById('passport').addEventListener('change', function(event) {
+        const file = event.target.files[0];
+        if (file) {
+            const preview = document.getElementById('previewImage');
+            preview.src = URL.createObjectURL(file);
+        }
+    });
+</script>

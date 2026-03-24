@@ -37,7 +37,7 @@
 
                                 <ul class="buttons-group">
                                     <li>
-                                        <a href="#0"
+                                        <a href="/studentdata/{{ $id }}"
                                             class="main-btn primary-btn-light square-btn btn-hover text-white">Student
                                             Data</a>
                                     </li>

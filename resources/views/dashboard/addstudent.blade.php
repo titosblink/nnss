@@ -108,7 +108,7 @@
                                     <div class="col-lg-4 col-md-6 col-12 mb-3">
                                         <label>State of Origin</label>
                                         <select name="states" id="state" class="form-control">
-                                            <option value="">-- Select State --</option>
+                                            <option value="">-- Select State -- </option>
                                             <option value="Abia">Abia</option>
                                             <option value="Adamawa">Adamawa</option>
                                             <option value="Akwa Ibom">Akwa Ibom</option>
@@ -153,7 +153,7 @@
                                     <div class="col-lg-4 col-md-6 col-12 mb-3">
                                         <label>Local Government</label>
                                         <select name="lga" id="lga" class="form-control">
-                                            <option value="">-- Select LGA --</option>
+                                            <option value="">-- Select LGA -- </option>
                                         </select>
                                     </div>
 

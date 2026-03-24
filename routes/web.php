@@ -56,7 +56,12 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/delstudent/{id}', [ActionController::class, 'delstudent'])->name('delstudent');
     Route::get('/viewstudent/{id}', [ActionController::class, 'viewstudent'])->name('viewstudent');
     Route::get('/uploadpassport/{id}', [ActionController::class, 'uploadpassport'])->name('uploadpassport');
+    Route::get('/studentdata/{id}', [ActionController::class, 'studentdata'])->name('studentdata');
 
+    Route::post('/uploadpassport', [StudentController::class, 'uploadPassport'])->name('uploadpassport');
     Route::post('/save-classes', [ActionController::class, 'saveClasses'])->name('save.classes');
     Route::post('/uploadstudent', [StudentController::class, 'uploadStudent'])->name('uploadstudent');
+    Route::post('/storestudent', [StudentController::class, 'storestudent'])->name('storestudent');
+
+
 });

@@ -514,4 +514,41 @@ Students::create([
                 ->with('error', 'Network error');
         }
     }
+
+    public function studentdata($id)
+        {
+            try{
+
+            $Divisions = Divisions::all();
+            $Houses = Houses::all();
+
+
+            $Students = Students::where('id', $id)->first();
+            $name_of_student = $Students->surname;
+            $oname_of_student = $Students->othername;
+            $ppt = $Students->passport;
+
+            $fullname = $name_of_student." ".$oname_of_student;
+
+            $studid =  $Students->studentid;
+            $clas =  $Students->clas;
+
+            $data = array('Students'=>$Students,
+                        'fullname'=>$fullname,
+                         'studid'=>$studid,
+                         'clas'=>$clas,
+                         'id'=>$id,
+                         'ppt'=>$ppt,
+                         'Houses'=>$Houses,
+                         'Divisions'=>$Divisions,
+                         );
+
+            return view('dashboard.studentdata',$data);
+
+            } catch (Exception $exception) {
+            return redirect()
+                ->back()
+                ->with('error', 'Network error');
+        }
+    }
 }
