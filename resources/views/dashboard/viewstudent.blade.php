@@ -42,7 +42,7 @@
                                             Data</a>
                                     </li>
                                     <li>
-                                        <a href="#0"
+                                        <a href="/psychometer/{{ $id }}"
                                             class="main-btn primary-btn-light square-btn btn-hover text-white">Affective
                                             Psychomotor Domain</a>
                                     </li>
