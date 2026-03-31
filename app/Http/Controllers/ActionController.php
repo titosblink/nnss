@@ -5,11 +5,16 @@ use Illuminate\Http\Request;
 
 use App\Models\Users as Users;
 use App\Models\Classes as Classes;
+use App\Models\Classuser as Classuser;
 use App\Models\Arms as Arms;
 use App\Models\Divisions as Divisions;
 use App\Models\Houses as Houses;
 use App\Models\Subjects as Subjects;
 use App\Models\Students as Students;
+use App\Models\Assessment as Assessment;
+use App\Models\Principal as Principal;
+use App\Models\Psychomotor as Psychomotor;
+
 use Hash;
 use File;
 use Auth;
@@ -171,13 +176,13 @@ public function resetpword($id)
         }
     }
 
+    public function principalcomments()
+        {
+            $Principal = Principal::all();
 
-
-
-
-
-
-
+            $data = array('Principal'=>$Principal);
+            return view('dashboard.principalcomments',$data);
+        }
     public function arms()
         {
             $Arms = Arms::all();
@@ -189,6 +194,12 @@ public function resetpword($id)
         {
 
             return view('dashboard.addarms');
+        }
+
+        public function addcomments()
+        {
+
+            return view('dashboard.addcomments');
         }
 
 
@@ -216,6 +227,19 @@ public function resetpword($id)
 
             DB::table('arm')->where('id', $id)->delete();
             return redirect()->back()->with('success', 'Arm successfully deleted');
+        } catch (\Exception $exception) {
+            return redirect()
+                ->back()
+                ->with('error', 'Network error');
+        }
+    }
+
+    public function delComments($id)
+    {
+        try {
+
+            DB::table('principalcomments')->where('id', $id)->delete();
+            return redirect()->back()->with('success', 'Comment successfully deleted');
         } catch (\Exception $exception) {
             return redirect()
                 ->back()
@@ -560,7 +584,7 @@ Students::create([
 
             $Divisions = Divisions::all();
             $Houses = Houses::all();
-
+            $Principal = Principal::all();
 
             $Students = Students::where('id', $id)->first();
             $name_of_student = $Students->surname;
@@ -580,11 +604,268 @@ Students::create([
                          'ppt'=>$ppt,
                          'Houses'=>$Houses,
                          'Divisions'=>$Divisions,
+                         'Principal'=>$Principal
                          );
 
             return view('dashboard.psychometer',$data);
 
             } catch (Exception $exception) {
+            return redirect()
+                ->back()
+                ->with('error', 'Network error');
+        }
+    }
+
+
+   public function assessment($id)
+{
+    try {
+        // 1. Fetch the student record
+        $student = Students::where('id', $id)->first();
+
+        if (!$student) {
+            return redirect()->back()->with('error', 'Student not found');
+        }
+
+        // 2. Find the Class ID that matches the student's class name (e.g., 'JSS 1 AYAM')
+        // This ensures the page displays subjects assigned to the WHOLE class
+        $classRecord = Classes::where('name', $student->clas)->first();
+
+        if ($classRecord) {
+            // Fetch subjects mapped to this class ID in the user_class table
+            $Classuser = Classuser::where('class_id', $classRecord->id)->get();
+        } else {
+            $Classuser = collect(); // Return empty collection if class doesn't exist
+        }
+
+        // 3. Prepare data for the view
+        $data = [
+            'Students' => $student,
+            'fullname' => $student->surname . " " . $student->othername,
+            'studid'   => $student->studentid,
+            'clas'     => $student->clas,
+            'id'       => $id,
+            'ppt'      => $student->passport,
+            'Classuser'=> $Classuser,
+        ];
+
+        return view('dashboard.assessment', $data);
+
+    } catch (\Exception $exception) {
+        return redirect()
+            ->back()
+            ->with('error', 'An error occurred while loading the assessment');
+    }
+}
+
+    public function comments($id)
+        {
+            try{
+
+            $Divisions = Divisions::all();
+            $Houses = Houses::all();
+            $Principal = Principal::all();
+
+            $Students = Students::where('id', $id)->first();
+            $name_of_student = $Students->surname;
+            $oname_of_student = $Students->othername;
+            $ppt = $Students->passport;
+
+            $fullname = $name_of_student." ".$oname_of_student;
+
+            $studid =  $Students->studentid;
+            $clas =  $Students->clas;
+
+            $data = array('Students'=>$Students,
+                        'fullname'=>$fullname,
+                         'studid'=>$studid,
+                         'clas'=>$clas,
+                         'id'=>$id,
+                         'ppt'=>$ppt,
+                         'Houses'=>$Houses,
+                         'Divisions'=>$Divisions,
+                         'Principal'=>$Principal,
+
+                         );
+
+            return view('dashboard.comments',$data);
+
+            } catch (Exception $exception) {
+            return redirect()
+                ->back()
+                ->with('error', 'Network error');
+        }
+    }
+
+    public function savenewcomments(Request $request)
+    {
+        try{
+
+    Principal::create([
+        'name' => $request->cname,
+    ]);
+
+    return redirect('/principalcomments')->with('success', 'Comments added successfully!');
+    // return redirect()->back()->with('success', 'Class added successfully!');
+
+        }catch(Exception $exception){
+            return redirect()
+                ->back()
+                ->with('error', 'Network Error');
+        }
+    }
+
+    public function viewresult($id)
+        {
+            try{
+
+
+            $Students = Students::where('id', $id)->first();
+            $StudentsResult = Assessment::where('studentid', $id)->get();
+            $Psychomotor = Psychomotor::where('studentid', $id)->first();
+
+            $name_of_student = $Students->surname;
+            $oname_of_student = $Students->othername;
+            $fullname = $name_of_student." ".$oname_of_student;
+            $ppt = $Students->passport;
+            $studid =  $Students->studentid;
+            $clas =  $Students->clas;
+
+            $data = array('fullname'=>$fullname,
+                         'studid'=>$studid,
+                         'clas'=>$clas,
+                         'id'=>$id,
+                         'ppt'=>$ppt,
+                         'Students'=>$Students,
+                         'StudentsResult'=>$StudentsResult,
+                         'Psychomotor'=>$Psychomotor,
+
+                         );
+
+            return view('dashboard.viewresult',$data);
+
+            } catch (Exception $exception) {
+            return redirect()
+                ->back()
+                ->with('error', 'Network error');
+        }
+    }
+
+    public function broadsheet()
+        {
+            $Classes = Classes::all();
+
+            $data = array('Classes'=>$Classes);
+            return view('dashboard.broadsheet',$data);
+        }
+
+        public function checkresult()
+        {
+
+            return view('checkresult');
+        }
+
+
+    public function broadsheet_class($id)
+        {
+            try{
+
+            $Classsubject = Classuser::where('class_id', $id)->get();
+            $claname =  Classuser::where('class_id', $id)->first();
+
+            $cn =  Classes::where('id', $claname->class_id)->first();
+            $classnamely =  $cn->name;
+
+
+// 1. Get all unique subjects assigned to this specific class
+// (Assumes class_id 11 based on your docx)
+$availableSubjects = DB::table('class_user')
+    ->where('class_id', 11)
+    ->pluck('subject') // Gets ['ENGLISH', 'MATHEMATICS', etc.]
+    ->unique();
+
+// 2. Fetch students with their assessments
+
+$broadsheet = Students::where('clas', $classnamely) // Filter by the specific class [cite: 1]
+    ->with(['assessments'])
+    ->withCount('assessments as no_of_subjects')
+    ->withSum('assessments as total_score', 'total')
+    ->withAvg('assessments as average_score', 'total')
+    ->get()
+    ->map(function ($student) use ($availableSubjects) {
+        // Dynamically add each subject's total to the student object
+        foreach ($availableSubjects as $subjectName) {
+            $score = $student->assessments
+                ->where('subject', $subjectName)
+                ->first();
+
+            // This creates properties like $student->ENGLISH or $student->BIOLOGY
+           $student->$subjectName = $score ? $score->total : 0; // [cite: 4]
+        }
+        return $student;
+    })
+    ->sortByDesc('total_score')
+    ->values();
+
+    $subjectSummaries = $availableSubjects->mapWithKeys(function ($subjectName) use ($broadsheet) {
+    $scores = $broadsheet->pluck($subjectName);
+
+    return [$subjectName => [
+        'average' => $scores->avg(),
+        'A'  => $scores->filter(fn($score) => $score >= 70)->count(),
+        'B'  => $scores->filter(fn($score) => $score >= 60 && $score < 70)->count(),
+        'C'  => $scores->filter(fn($score) => $score >= 50 && $score < 60)->count(),
+        'P'  => $scores->filter(fn($score) => $score >= 40 && $score < 50)->count(),
+        'F9' => $scores->filter(fn($score) => $score < 40)->count(),
+    ]];
+});
+
+            $data = array('id'=>$id,'subjectSummaries' => $subjectSummaries,'availableSubjects'=>$availableSubjects, 'Classsubject'=>$Classsubject,'broadsheet'=>$broadsheet,'claname'=>$claname, 'classnamely'=>$classnamely);
+
+
+            return view('dashboard.broadsheetclass',$data);
+
+            } catch (Exception $exception) {
+            return redirect()
+                ->back()
+                ->with('error', 'Network error');
+        }
+    }
+
+
+    public function myresult(Request $request)
+{
+    try {
+
+           $sid = $request->studentid;
+           $Students = Students::where('studentid', $sid)->first();
+           $id = $Students->id;
+
+            $Students = Students::where('id', $id)->first();
+            $StudentsResult = Assessment::where('studentid', $id)->get();
+            $Psychomotor = Psychomotor::where('studentid', $id)->first();
+
+            $name_of_student = $Students->surname;
+            $oname_of_student = $Students->othername;
+            $fullname = $name_of_student." ".$oname_of_student;
+            $ppt = $Students->passport;
+            $studid =  $Students->studentid;
+            $clas =  $Students->clas;
+
+            $data = array('fullname'=>$fullname,
+                         'studid'=>$studid,
+                         'clas'=>$clas,
+                         'id'=>$id,
+                         'ppt'=>$ppt,
+                         'Students'=>$Students,
+                         'StudentsResult'=>$StudentsResult,
+                         'Psychomotor'=>$Psychomotor,
+
+                         );
+
+            return view('dashboard.viewresult',$data);
+
+        } catch (\Exception $exception) {
             return redirect()
                 ->back()
                 ->with('error', 'Network error');

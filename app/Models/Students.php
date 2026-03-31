@@ -26,4 +26,10 @@ class Students extends Model
     'parent_address',
     'parent_phone',
 ];
+
+// Add this relationship to link to the assessment table
+    public function assessments()
+    {
+        return $this->hasMany(Assessment::class, 'studentid', 'id');
+    }
 }

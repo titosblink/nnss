@@ -249,6 +249,16 @@
                                             <label>Attendance</label>
                                             <input class="form-control" name="attendance" placeholder="Attendance">
                                         </div>
+                                        <div class="col-md-4 mb-3">
+                                            <label>Principal Comment</label>
+                                            <select name="prin_comm" class="form-control">
+                                                <option value="">--Select--</option>
+                                                @foreach ($Principal as $Principal)
+                                                    <option value="{{ $Principal->name }}">{{ $Principal->name }}
+                                                    </option>
+                                                @endforeach
+                                            </select>
+                                        </div>
 
 
                                     </div>

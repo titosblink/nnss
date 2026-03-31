@@ -10,6 +10,9 @@ Route::get('/', function () {
 });
 
 Auth::routes();
+    Route::get('/checkresult', [ActionController::class, 'checkresult'])->name('checkresult');
+
+    Route::post('/myresult', [ActionController::class, 'myresult'])->name('myresult');
 
 Route::middleware(['auth'])->group(function () {
 
@@ -25,6 +28,10 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/houses', [ActionController::class, 'houses'])->name('houses');
     Route::get('/subjects', [ActionController::class, 'subjects'])->name('subjects');
     Route::get('/uploadstudents', [ActionController::class, 'uploadstudents'])->name('uploadstudents');
+    Route::get('/principalcomments', [ActionController::class, 'principalcomments'])->name('principalcomments');
+    Route::get('/broadsheet', [ActionController::class, 'broadsheet'])->name('broadsheet');
+
+
 
     // Add pages
     Route::get('/addclass', [ActionController::class, 'addclass'])->name('addclass');
@@ -33,6 +40,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/addhouses', [ActionController::class, 'addhouses'])->name('addhouses');
     Route::get('/addsubjects', [ActionController::class, 'addsubjects'])->name('addsubjects');
     Route::get('/addstudent', [ActionController::class, 'addstudent'])->name('addstudent');
+    Route::get('/addcomments', [ActionController::class, 'addcomments'])->name('addcomments');
 
     // Save (POST)
     Route::post('/changepword', [ActionController::class, 'changepword'])->name('changepword');
@@ -43,6 +51,7 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/savenewhouses', [ActionController::class, 'savenewhouses'])->name('savenewhouses');
     Route::post('/savenewsubjects', [ActionController::class, 'savenewsubjects'])->name('savenewsubjects');
     Route::post('/savenewstudent', [ActionController::class, 'savenewstudent'])->name('savenewstudent');
+    Route::post('/savenewcomments', [ActionController::class, 'savenewcomments'])->name('savenewcomments');
 
     // Actions
     Route::get('/resetpword/{id}', [ActionController::class, 'resetpword'])->name('resetpword');
@@ -58,14 +67,18 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/uploadpassport/{id}', [ActionController::class, 'uploadpassport'])->name('uploadpassport');
     Route::get('/studentdata/{id}', [ActionController::class, 'studentdata'])->name('studentdata');
     Route::get('/psychometer/{id}', [ActionController::class, 'psychometer'])->name('psychometer');
-
-
+    Route::get('/comments/{id}', [ActionController::class, 'comments'])->name('comments');
+    Route::get('/assessment/{id}', [ActionController::class, 'assessment'])->name('assessment');
+    Route::get('/delComments/{id}', [ActionController::class, 'delComments'])->name('delComments');
 
     Route::post('/uploadpassport', [StudentController::class, 'uploadPassport'])->name('uploadpassport');
     Route::post('/save-classes', [ActionController::class, 'saveClasses'])->name('save.classes');
     Route::post('/uploadstudent', [StudentController::class, 'uploadStudent'])->name('uploadstudent');
     Route::post('/storestudent', [StudentController::class, 'storestudent'])->name('storestudent');
     Route::post('/storepsycho', [StudentController::class, 'storepsycho'])->name('storepsycho');
+    Route::post('/storesassessment', [StudentController::class, 'storesassessment'])->name('storesassessment');
 
+    Route::get('/viewresult/{id}', [ActionController::class, 'viewresult'])->name('viewresult');
+    Route::get('/broadsheet_class/{id}', [ActionController::class, 'broadsheet_class'])->name('broadsheet_class');
 
 });

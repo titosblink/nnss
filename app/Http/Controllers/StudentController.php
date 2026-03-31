@@ -68,22 +68,48 @@ public function storestudent(Request $request)
 
         $idi = $request->idi;
 
-        $Students = Students::where('id', $idi)->first();
-        if($Students){
-            DB::table('students')->where('id', $idi)->update([
-                'dob' => $request->dob,
-                'states' => $request->states,
-                'lga' => $request->lga,
-                'place_of_birth' => $request->place_of_birth,
-                'parent_address' => $request->parent_address,
-                'parent_phone' => $request->parent_phone,
-                'house' => $request->house,
-                'division' => $request->division,
-                'parent' => $request->parent_status,
-                'updated_at' => now()
-            ]);
+        // ✅ Use same column everywhere
+        $student = DB::table('students')->where('id', $idi)->first();
 
-        }else{
+        if ($student) {
+
+            $data = [];
+
+            // ✅ Update only if not empty
+            $fields = [
+                'firstname',
+                'lastname',
+                'dob',
+                'states',
+                'lga',
+                'place_of_birth',
+                'parent_address',
+                'parent_phone',
+                'house',
+                'division'
+            ];
+
+            foreach ($fields as $field) {
+                if ($request->$field !== null && $request->$field !== '') {
+                    $data[$field] = $request->$field;
+                }
+            }
+
+            // special case
+            if ($request->parent_status !== null && $request->parent_status !== '') {
+                $data['parent'] = $request->parent_status;
+            }
+
+            $data['updated_at'] = now();
+
+            if (!empty($data)) {
+                DB::table('students')
+                    ->where('id', $idi) // ✅ fixed
+                    ->update($data);
+            }
+
+        } else {
+
             DB::table('students')->insert([
                 'firstname' => $request->firstname,
                 'lastname' => $request->lastname,
@@ -96,19 +122,15 @@ public function storestudent(Request $request)
                 'house' => $request->house,
                 'division' => $request->division,
                 'parent' => $request->parent_status,
-                'updated_at' => now(),
                 'created_at' => now(),
-
+                'updated_at' => now(),
             ]);
         }
 
-
-
-    return back()->with('success', 'Student saved successfully!');
-
+        return back()->with('success', 'Student saved successfully!');
 
     } catch (Exception $e) {
-        return back()->with('error', 'Error uploading passport');
+        return back()->with('error', 'Error saving student');
     }
 }
 
@@ -198,9 +220,11 @@ public function storepsycho(Request $request)
             $data['attendance'] = $request->attendance;
         }
 
-        if ($request->neatness !== null && $request->neatness !== '') {
-            $data['neatness'] = $request->neatness;
+        if ($request->prin_comm !== null && $request->prin_comm !== '') {
+            $data['prin_comm'] = $request->prin_comm;
         }
+
+
 
         $data['updated_at'] = now();
 
@@ -234,6 +258,7 @@ public function storepsycho(Request $request)
             'technical' => $request->technical,
             'labour' => $request->labour,
             'attendance' => $request->attendance,
+            'prin_comm' => $request->prin_comm,
             'neatness' => $request->neatness,
             'created_at' => now(),
             'updated_at' => now(),
@@ -244,6 +269,126 @@ public function storepsycho(Request $request)
 
 } catch (Exception $e) {
     return back()->with('error', 'Error saving record');
+}
+}
+
+
+
+public function storesassessment(Request $request)
+{
+   try {
+
+    $studentId = $request->idi;
+
+    foreach ($request->subject as $index => $subject) {
+
+        // Get existing record for this subject
+        $existing = DB::table('assessment')
+            ->where('studentid', $studentId)
+            ->where('subject', $subject)
+            ->first();
+
+        // Prepare data (ONLY non-empty inputs)
+        $data = [];
+
+        if (!empty($request->firsttest[$index])) {
+            $data['firsttest'] = $request->firsttest[$index];
+        }
+
+        if (!empty($request->secondtest[$index])) {
+            $data['secondtest'] = $request->secondtest[$index];
+        }
+
+        if (!empty($request->exams[$index])) {
+            $data['exam'] = $request->exams[$index];
+        }
+
+        if (!empty($request->sbjposi[$index])) {
+            $data['sbjposi'] = $request->sbjposi[$index];
+        }
+
+        if (!empty($request->classave[$index])) {
+            $data['classave'] = $request->classave[$index];
+        }
+
+        // ✅ Calculate total ONLY if values exist
+        $ft  = $request->firsttest[$index]  ?? 0;
+        $st  = $request->secondtest[$index] ?? 0;
+        $ex  = $request->exams[$index]      ?? 0;
+        $sp  = $request->sbjposi[$index]      ?? 0;
+        $ca  = $request->classave[$index]      ?? 0;
+
+        if ($ft !== '' || $st !== '' || $ex !== ''|| $sp !== '' || $ca !== '') {
+            $data['total'] = (int)$ft + (int)$st + (int)$ex;
+        }
+
+        $newtotal = (int)$ft + (int)$st + (int)$ex;
+
+        if ($newtotal >= 75) {
+            $gradess= 'A1';
+            $remarkss = "Excellent";
+        }elseif ($newtotal >= 70) {
+            $gradess = 'B2';
+            $remarkss = "Very Good";
+        }elseif ($newtotal >= 65) {
+            $gradess = 'B3';
+            $remarkss = "Good";
+        }elseif ($newtotal >= 60) {
+            $gradess = 'C4';
+            $remarkss = "Fair";
+        }elseif ($newtotal >= 55) {
+            $gradess = 'C5';
+            $remarkss = "Fair";
+        }elseif ($newtotal >= 50) {
+            $gradess = 'C6';
+            $remarkss = "Fair";
+        }elseif ($newtotal >= 45) {
+            $gradess = 'D7';
+            $remarkss = "Pass";
+        }else {
+            $gradess = 'E8';
+            $remarkss = "Fail";
+        }
+
+
+            $data['grade'] = $gradess;
+            $data['remark'] = $remarkss;
+        $data['updated_at'] = now();
+
+        if ($existing) {
+
+            // ✅ UPDATE only non-empty fields
+            if (!empty($data)) {
+                DB::table('assessment')
+                    ->where('studentid', $studentId)
+                    ->where('subject', $subject)
+                    ->update($data);
+            }
+
+        } else {
+
+            // ✅ INSERT (new row)
+            DB::table('assessment')->insert([
+                'studentid'  => $studentId,
+                'subject'    => $subject,
+                'firsttest'  => $request->firsttest[$index]  ?? 0,
+                'secondtest' => $request->secondtest[$index] ?? 0,
+                'exam'       => $request->exams[$index]      ?? 0,
+                'total'      => (int)$ft + (int)$st + (int)$ex,
+                'sbjposi'       => $request->sbjposi[$index]      ?? 0,
+                'classave'       => $request->classave[$index]      ?? 0,
+                'remark'       => $remarkss ?? 0,
+                'grade'       => $gradess ?? 0,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ]);
+        }
+    }
+
+    return back()->with('success', 'Assessment saved successfully!');
+
+} catch (Exception $e) {
+    return back()->with('error', 'Error saving assessment');
 }
 }
 

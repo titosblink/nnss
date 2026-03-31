@@ -46,12 +46,12 @@
                                             class="main-btn primary-btn-light square-btn btn-hover text-white">Affective
                                             Psychomotor Domain</a>
                                     </li>
-                                    <li>
-                                        <a href="#0"
+                                    {{-- <li>
+                                        <a href="/comments/{{ $id }}"
                                             class="main-btn primary-btn-light square-btn btn-hover text-white">Comments</a>
-                                    </li>
+                                    </li> --}}
                                     <li>
-                                        <a href="#0"
+                                        <a href="/assessment/{{ $id }}"
                                             class="main-btn primary-btn-light square-btn btn-hover text-white">Assessment</a>
                                     </li>
 
@@ -59,6 +59,11 @@
                                         <a href="/uploadpassport/{{ $id }}"
                                             class="main-btn primary-btn-light square-btn btn-hover text-white">Upload
                                             Passport</a>
+                                    </li>
+                                    <li>
+                                        <a href="/viewresult/{{ $id }}" target="_blank"
+                                            class="main-btn primary-btn-light square-btn btn-hover text-white">View
+                                            Result</a>
                                     </li>
                                 </ul>
 
