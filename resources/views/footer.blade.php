@@ -4,7 +4,7 @@
         <div class="row g-5">
             <div class="col-lg-3 col-md-6">
                 <h4 class="text-white mb-4">Our Location</h4>
-                <p class="mb-2"><i class="fa fa-map-marker-alt me-3"></i>Ire-Aapa, PMB 4011 Ogbomoso, Oyo State
+                <p class="mb-2"><i class="fa fa-map-marker-alt me-3"></i>Iresa-Apa, PMB 4011 Ogbomoso, Oyo State
                 </p>
 
 

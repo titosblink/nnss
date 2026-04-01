@@ -43,7 +43,7 @@
                         Ogbomoso</h5>
                 </a>
                 <div class="ms-auto d-flex align-items-center">
-                    <small class="ms-4"><i class="fa fa-map-marker-alt me-3"></i>Ire-Aapa, PMB 4011 Ogbomoso, Oyo
+                    <small class="ms-4"><i class="fa fa-map-marker-alt me-3"></i>Iresa-Apa, PMB 4011 Ogbomoso, Oyo
                         State</small>
 
                 </div>

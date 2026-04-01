@@ -13,107 +13,68 @@
             <div class="row">
                 <div class="col-lg-12">
                     <div class="card-style mb-30">
-                        <h6 class="mb-10">All Student</h6>
                         <div class="mb-3">
+                            <div class="col-lg-12">
 
-                        </div>
-                        <div class="table-wrapper table-responsive">
-                            <div class="mb-3 d-flex justify-content-between">
-                                <input type="text" id="tableSearch" class="form-control w-25"
-                                    placeholder=" Search student..." />
+                                <ul class="buttons-group">
 
-                                <div>
-                                    <button class="btn btn-success me-2" onclick="exportToExcel()">
-                                        Export Excel
-                                    </button>
-                                    <button class="btn btn-danger" onclick="exportToPDF()">
-                                        Export PDF
-                                    </button>
-                                </div>
+                                    <li>
+                                        <a href="/students"
+                                            class="main-btn primary-btn-light square-btn btn-hover text-white">
+                                            Student</a>
+                                    </li>
+                                    <li>
+                                        <a href="/uploadstudents"
+                                            class="main-btn primary-btn-light square-btn btn-hover text-white">
+                                            Upload Students via Excel</a>
+                                    </li>
+                                    <li>
+                                        <a href="/addstudent"
+                                            class="main-btn primary-btn-light square-btn btn-hover text-white">
+                                            Add Student Manually</a>
+                                    </li>
+                                    <li>
+                                        <a href="/classes"
+                                            class="main-btn primary-btn-light square-btn btn-hover text-white">
+                                            Manage Classes</a>
+                                    </li>
+                                    <li>
+                                        <a href="/principalcomments"
+                                            class="main-btn primary-btn-light square-btn btn-hover text-white">
+                                            Manage Comments</a>
+                                    </li>
+
+                                    <li>
+                                        <a href="/division"
+                                            class="main-btn primary-btn-light square-btn btn-hover text-white">
+                                            Manage Division</a>
+                                    </li>
+                                    <li>
+                                        <a href="/houses"
+                                            class="main-btn primary-btn-light square-btn btn-hover text-white">
+                                            Manage House</a>
+                                    </li>
+                                    <li>
+                                        <a href="/subjects"
+                                            class="main-btn primary-btn-light square-btn btn-hover text-white">
+                                            Manage Subjects</a>
+                                    </li>
+                                    <li>
+                                        <a href="/broadsheet"
+                                            class="main-btn primary-btn-light square-btn btn-hover text-white">
+                                            View Broadsheet</a>
+                                    </li>
+
+                                    <li>
+                                        <a href="/users"
+                                            class="main-btn primary-btn-light square-btn btn-hover text-white">
+                                            Manage Users</a>
+                                    </li>
+                                </ul>
+
                             </div>
-                            <table class="table">
-                                <thead>
-                                    <tr>
-                                        <th class="lead-info">
-                                            <h6>Lead</h6>
-                                        </th>
-                                        <th class="lead-email">
-                                            <h6>Email</h6>
-                                        </th>
-                                        <th class="lead-phone">
-                                            <h6>Phone No</h6>
-                                        </th>
-                                        <th class="lead-company">
-                                            <h6>Company</h6>
-                                        </th>
-                                        <th>
-                                            <h6>Action</h6>
-                                        </th>
-                                    </tr>
-                                    <!-- end table row-->
-                                </thead>
-                                <tbody id="tableBody">
-                                    <tr>
-                                        <td class="min-width">
-                                            <div class="lead">
-                                                <div class="lead-image">
-                                                    <img src="assets/images/lead/lead-1.png" alt="" />
-                                                </div>
-                                                <div class="lead-text">
-                                                    <p>Courtney Henry</p>
-                                                </div>
-                                            </div>
-                                        </td>
-                                        <td class="min-width">
-                                            <p><a href="#0">yourmail@gmail.com</a></p>
-                                        </td>
-                                        <td class="min-width">
-                                            <p>(303)555 3343523</p>
-                                        </td>
-                                        <td class="min-width">
-                                            <p>UIdeck digital agency</p>
-                                        </td>
-                                        <td>
-                                            <div class="action">
-                                                <button class="text-danger">
-                                                    <i class="lni lni-trash-can"></i>
-                                                </button>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    <!-- end table row -->
-                                    <tr>
-                                        <td class="min-width">
-                                            <div class="lead">
-                                                <div class="lead-image">
-                                                    <img src="assets/images/lead/lead-2.png" alt="" />
-                                                </div>
-                                                <div class="lead-text">
-                                                    <p>John Doe</p>
-                                                </div>
-                                            </div>
-                                        </td>
-                                        <td class="min-width">
-                                            <p><a href="#0">yourmail@gmail.com</a></p>
-                                        </td>
-                                        <td class="min-width">
-                                            <p>(303)555 3343523</p>
-                                        </td>
-                                        <td class="min-width">
-                                            <p>Graygrids digital agency</p>
-                                        </td>
-                                        <td>
-                                            <div class="action">
-                                                <button class="text-danger">
-                                                    <i class="lni lni-trash-can"></i>
-                                                </button>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                            <!-- end table -->
                         </div>
+
                     </div>
                     <!-- end card -->
                 </div>
